@@ -9,12 +9,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.SplittableRandom;
 
 import static com.example.server.enumeration.Status.SERVER_DOWN;
 import static com.example.server.enumeration.Status.SERVER_UP;
@@ -36,9 +39,6 @@ public class ServerServiceImpl implements ServerService {
         return serverRepo.save(server);
     }
 
-    private String setServerImageURL() {
-        return null;
-    }
 
     @Override
     public Server pingServer(String ipAdress) throws IOException {
@@ -64,11 +64,22 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server updateServer(Server server) {
-        return null;
+        log.info("Updating server with name: {}", server.getName());
+        return serverRepo.save(server);
     }
 
     @Override
     public Boolean deleteServer(Long id) {
-        return null;
+        log.info("Deleting server by ID: {}", id);
+        serverRepo.deleteById(id);
+        return true;
     }
+
+    //URI builder using the current context path of the application.
+    private String setServerImageURL() {
+        String [] imageServerName = {"server1.png", "server2.png", "server3.png", "server4.png"};
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/server/image/" + imageServerName[new Random().nextInt(4)]).toUriString();
+    }
+
 }
