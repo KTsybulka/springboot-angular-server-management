@@ -7,5 +7,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-
+      dialect: org.hibernate.dialect.MySQL8Dialect  # Explicit MySQL 8 dialect
+      format_sql: true  # Format SQL for better readability
+    show-sql: true  # Log SQL statements
