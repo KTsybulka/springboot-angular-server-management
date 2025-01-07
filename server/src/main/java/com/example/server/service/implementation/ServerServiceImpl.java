@@ -24,17 +24,20 @@ import static com.example.server.enumeration.Status.SERVER_UP;
 
 //in Lombok automatically generates a constructor for all the final fields
 // and any fields annotated with @NonNull in a class.
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
 @Transactional
 @Slf4j
 public class ServerServiceImpl implements ServerService {
     private final ServerRepo serverRepo;
 
+    public ServerServiceImpl(ServerRepo serverRepo) {
+        this.serverRepo = serverRepo;
+    }
 
     @Override
     public Server createServer(Server server) {
-        log.info("Creating server with name: {}", server.getName());
+//        log.info("Creating server with name: {}", server.getName());
         server.setImageURL(setServerImageURL());
         return serverRepo.save(server);
     }
@@ -42,7 +45,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server pingServer(String ipAddress) throws IOException {
-        log.info("Pinging server IP: {}", ipAddress);
+//        log.info("Pinging server IP: {}", ipAddress);
         Server server =  serverRepo.findByIpAddress(ipAddress);
         InetAddress address = InetAddress.getByName(ipAddress);
         server.setStatus(address.isReachable(10000) ? SERVER_UP : SERVER_DOWN);
@@ -52,25 +55,25 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Collection<Server> getAllServers(int limit) {
-        log.info("Fetching all servers");
+//        log.info("Fetching all servers");
         return serverRepo.findAll(PageRequest.of(0, limit)).toList();
     }
 
     @Override
     public Server getServerById(Long id) {
-        log.info("Fetching server by id: {}", id);
+//        log.info("Fetching server by id: {}", id);
         return serverRepo.findById(id).orElseThrow(() -> new RuntimeException("Server not found with id"));
     }
 
     @Override
     public Server updateServer(Server server) {
-        log.info("Updating server with name: {}", server.getName());
+//        log.info("Updating server with name: {}", server.getName());
         return serverRepo.save(server);
     }
 
     @Override
     public Boolean deleteServer(Long id) {
-        log.info("Deleting server by ID: {}", id);
+//        log.info("Deleting server by ID: {}", id);
         serverRepo.deleteById(id);
         return true;
     }

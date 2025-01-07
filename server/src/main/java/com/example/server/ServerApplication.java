@@ -56,5 +56,4 @@ public class ServerApplication {
 					SERVER_UP));
 		};
 	}
-
 }

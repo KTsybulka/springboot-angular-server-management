@@ -27,74 +27,88 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 @RequestMapping("/server")
 
 //annotation in Lombok is used to automatically generate a constructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ServerResourse {
 
+
     private final ServerServiceImpl serverService;
+
+    public ServerResourse(ServerServiceImpl serverService) {
+        this.serverService = serverService;
+    }
 
     @GetMapping("/list")
     public ResponseEntity<Response> getServers() {
         return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(now())
-                        .data(Map.of("servers", serverService.getAllServers(30)))
-                        .message("Success")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build());
+                new Response(now(), Map.of("servers", serverService.getAllServers(30)),
+                        "Success", OK, OK.value()));
+
+//                Response.builder()
+//                        .timestamp(now())
+//                        .data(Map.of("servers", serverService.getAllServers(30)))
+//                        .message("Success")
+//                        .status(OK)
+//                        .statusCode(OK.value())
+//                        .build());
     }
 
     @GetMapping("/ping/{ipAddress}")
     public ResponseEntity<Response> pingServer(@PathVariable("ipAddress") String ipAddress) throws IOException {
         Server server = serverService.pingServer(ipAddress);
         return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(now())
-                        .data(Map.of("server", server))
-                        .message(server.getStatus() == Status.SERVER_UP ? "Server is up" : "Server is down")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
+                new Response(now(), Map.of("server", server),
+                        server.getStatus() == Status.SERVER_UP ? "Server is up" : "Server is down", OK, OK.value()));
+
+//                Response.builder()
+//                        .timestamp(now())
+//                        .data(Map.of("server", server))
+//                        .message(server.getStatus() == Status.SERVER_UP ? "Server is up" : "Server is down")
+//                        .status(OK)
+//                        .statusCode(OK.value())
+//                        .build());
     }
 
     @PostMapping("/save")
     public ResponseEntity<Response> saverServer(@RequestBody @Valid Server server) {
         return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(now())
-                        .data(Map.of("server", serverService.createServer(server)))
-                        .message("Server created successfully")
-                        .status(CREATED)
-                        .statusCode(CREATED.value())
-                        .build()
-        );
+                new Response(now(), Map.of("server", serverService.createServer(server)),
+                        "Server created successfully", CREATED, CREATED.value()));
+//                Response.builder()
+//                        .timestamp(now())
+//                        .data(Map.of("server", serverService.createServer(server)))
+//                        .message("Server created successfully")
+//                        .status(CREATED)
+//                        .statusCode(CREATED.value())
+//                        .build());
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Response> getServerById(@PathVariable("id") Long id){
         return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp((now()))
-                        .data(Map.of("server", serverService.getServerById(id)))
-                        .message("Server fetched successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
+                new Response(now(), Map.of("server", serverService.getServerById(id)),
+                        "Server fetched successfully", OK, OK.value()));
+
+//                Response.builder()
+//                        .timestamp((now()))
+//                        .data(Map.of("server", serverService.getServerById(id)))
+//                        .message("Server fetched successfully")
+//                        .status(OK)
+//                        .statusCode(OK.value())
+//                        .build());
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Response> deleteServer(@PathVariable("id") Long id){
         return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(now())
-                        .data(Map.of("deleteed", serverService.deleteServer(id)))
-                        .message("Server deleted successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
+                new Response(now(), Map.of("deleted", serverService.deleteServer(id)),
+                        "Server deleted successfully", OK, OK.value()));
+//                Response.builder()
+//                        .timestamp(now())
+//                        .data(Map.of("deleteed", serverService.deleteServer(id)))
+//                        .message("Server deleted successfully")
+//                        .status(OK)
+//                        .statusCode(OK.value())
+//                        .build());
     }
 
     @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
