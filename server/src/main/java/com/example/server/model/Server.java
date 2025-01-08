@@ -39,6 +39,9 @@ public class Server {
         this.status = status;
     }
 
+    public Server() {
+    }
+
     public Long getId() {
         return id;
     }
