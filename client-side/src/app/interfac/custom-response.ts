@@ -1,4 +1,4 @@
-import { DataState } from "../enum/data-state.enum";
+import { Server } from "./server";
 
 export interface CustomResponse {
     timeStamp : Date;
@@ -7,5 +7,5 @@ export interface CustomResponse {
     reason : string;
     message : string;
     developerMessage : string;
-    data : { ser}
+    data : { servers?: Server[], server?: Server };
 }
